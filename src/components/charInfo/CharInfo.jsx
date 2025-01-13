@@ -1,28 +1,29 @@
-import {useEffect, useState} from 'react';
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
+import { useEffect, useState } from "react";
 
-import { Spinner } from '../spinner/Spinner.jsx';
-import { ErrorMessage } from '../errorMessage/ErrorMessage.jsx';
-import { Skeleton } from '../skeleton/Skeleton.jsx';
+import { ErrorMessage } from "../errorMessage/ErrorMessage.jsx";
+import { Skeleton } from "../skeleton/Skeleton.jsx";
+import { Spinner } from "../spinner/Spinner.jsx";
 
-import './charInfo.scss';
-import useMarvelService from '../../services/MarvelService';
+import useMarvelService from "../../services/MarvelService";
+import "./charInfo.scss";
 
-const CharInfo = (props) => {
+const CharInfo = props => {
   const [char, setChar] = useState(null);
 
-  const {getCharacter, error, loading} = useMarvelService();
+  const { getComic, error, loading, clearError } = useMarvelService();
 
   useEffect(() => {
     updateChar();
-  }, [props.charId])
+  }, [props.charId]);
 
   const updateChar = () => {
     const { charId } = props;
 
     if (!charId) return;
 
-    getCharacter(charId).then(onCharLoaded);
+    clearError();
+    getComic(charId).then(onCharLoaded);
   };
 
   const onCharLoaded = char => {
@@ -42,14 +43,17 @@ const CharInfo = (props) => {
       {content}
     </div>
   );
-}
+};
 
 const View = ({ char }) => {
   const { name, description, thumbnail, homepage, wiki, comics } = char;
 
-  let imgStyle = { 'objectFit': 'cover' };
-  if (thumbnail === 'http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg') {
-    imgStyle = { 'objectFit': 'contain' };
+  let imgStyle = { objectFit: "cover" };
+  if (
+    thumbnail ===
+    "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
+  ) {
+    imgStyle = { objectFit: "contain" };
   }
 
   return (
@@ -71,7 +75,7 @@ const View = ({ char }) => {
       <div className="char__descr">{description}</div>
       <div className="char__comics">Comics:</div>
       <ul className="char__comics-list">
-        {comics.length > 0 ? null : 'There is no comics with this character'}
+        {comics.length > 0 ? null : "There is no comics with this character"}
         {comics.map((item, i) => {
           if (i > 9) return;
           return (
@@ -87,11 +91,10 @@ const View = ({ char }) => {
 
 View.propTypes = {
   char: PropTypes.object,
-}
+};
 
 CharInfo.propTypes = {
   charId: PropTypes.number,
 };
 
 export default CharInfo;
-

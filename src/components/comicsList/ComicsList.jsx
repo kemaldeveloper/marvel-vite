@@ -3,6 +3,7 @@ import { useEffect, useState } from "react";
 import useMarvelService from "../../services/MarvelService.js";
 import { ErrorMessage } from "../errorMessage/ErrorMessage.jsx";
 import { Spinner } from "../spinner/Spinner.jsx";
+import { Link } from "react-router-dom";
 
 const ComicsList = () => {
   const [comicsList, setComicsList] = useState([]);
@@ -21,7 +22,7 @@ const ComicsList = () => {
     getAllComics(offset).then(onComicsListLoaded);
   };
 
-  const onComicsListLoaded = (newComicsList) => {
+  const onComicsListLoaded = newComicsList => {
     let ended = false;
     if (newComicsList.length < 8) {
       ended = true;
@@ -36,20 +37,20 @@ const ComicsList = () => {
     const items = arr.map((item, i) => {
       return (
         <li className="comics__item" key={i}>
-          <a href="#">
-            <img src={item.thumbnail} alt={item.title} className="comics__item-img" />
+          <Link to={`/comics/${item.id}`}>
+            <img
+              src={item.thumbnail}
+              alt={item.title}
+              className="comics__item-img"
+            />
             <div className="comics__item-name">{item.title}</div>
             <div className="comics__item-price">{item.price}</div>
-          </a>
+          </Link>
         </li>
       );
     });
 
-    return (
-      <ul className="comics__grid">
-        {items}
-      </ul>
-    );
+    return <ul className="comics__grid">{items}</ul>;
   }
 
   const items = renderItems(comicsList);
@@ -64,9 +65,10 @@ const ComicsList = () => {
       {items}
       <button
         disabled={newItemLoading}
-        style={{ "display": comicsEnded ? "none" : "block" }}
+        style={{ display: comicsEnded ? "none" : "block" }}
         className="button button__main button__long"
-        onClick={() => onRequest(offset)}>
+        onClick={() => onRequest(offset)}
+      >
         <div className="inner">load more</div>
       </button>
     </div>
