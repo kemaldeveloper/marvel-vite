@@ -8,9 +8,7 @@ const useMarvelService = () => {
   const _baseOffset = 210;
 
   const getAllCharacters = async (offset = _baseOffset) => {
-    const res = await request(
-      `${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`
-    );
+    const res = await request(`${_apiBase}characters?limit=9&offset=${offset}&${_apiKey}`);
     return res.data.results.map(_transformCharacter);
   };
 
@@ -20,16 +18,18 @@ const useMarvelService = () => {
   };
 
   const getAllComics = async (offset = 0) => {
-    const res = await request(
-      `${_apiBase}comics?orderBy=issueNumber&limit=8&offset=${offset}&${_apiKey}`
-    );
+    const res = await request(`${_apiBase}comics?orderBy=issueNumber&limit=8&offset=${offset}&${_apiKey}`);
     return res.data.results.map(_transformComics);
+  };
+
+  const getCharacterByName = async name => {
+    const res = await request(`${_apiBase}characters?name=${name}&${_apiKey}`);
+    return res.data.results.map(_transformCharacter);
   };
 
   const getComic = async id => {
     const res = await request(`${_apiBase}comics/${id}?${_apiKey}`);
 
-    console.log(res);
     return _transformComics(res.data.results[0]);
   };
 
@@ -50,15 +50,11 @@ const useMarvelService = () => {
       id: comics.id,
       title: comics.title,
       description: comics.description || "There is no comics yet!",
-      pageCount: comics.pageCount
-        ? `${comics.pageCount} р.`
-        : "No information about the number of pages",
+      pageCount: comics.pageCount ? `${comics.pageCount} р.` : "No information about the number of pages",
       thumbnail: comics.thumbnail.path + "." + comics.thumbnail.extension,
       language: comics.textObjects[0]?.language || "en-us",
       // optional chaining operator
-      price: comics.prices[0].price
-        ? `${comics.prices[0].price}$`
-        : "not available",
+      price: comics.prices[0].price ? `${comics.prices[0].price}$` : "not available",
     };
   };
 
@@ -70,6 +66,7 @@ const useMarvelService = () => {
     getAllComics,
     getComic,
     clearError,
+    getCharacterByName,
   };
 };
 

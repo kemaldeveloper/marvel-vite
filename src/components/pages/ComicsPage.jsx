@@ -1,8 +1,7 @@
-import ComicsList from "../comicsList/ComicsList.jsx";
 import AppBanner from "../appBanner/AppBanner.jsx";
+import ComicsList from "../comicsList/ComicsList.jsx";
 
-export const ComicsPage = () => {
-
+const ComicsPage = () => {
   return (
     <>
       <AppBanner />
@@ -10,3 +9,5 @@ export const ComicsPage = () => {
     </>
   );
 };
+
+export default ComicsPage;

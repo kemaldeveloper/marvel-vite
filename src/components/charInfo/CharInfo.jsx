@@ -11,7 +11,7 @@ import "./charInfo.scss";
 const CharInfo = props => {
   const [char, setChar] = useState(null);
 
-  const { getComic, error, loading, clearError } = useMarvelService();
+  const { getCharacter, error, loading, clearError } = useMarvelService();
 
   useEffect(() => {
     updateChar();
@@ -23,7 +23,7 @@ const CharInfo = props => {
     if (!charId) return;
 
     clearError();
-    getComic(charId).then(onCharLoaded);
+    getCharacter(charId).then(onCharLoaded);
   };
 
   const onCharLoaded = char => {
@@ -49,10 +49,7 @@ const View = ({ char }) => {
   const { name, description, thumbnail, homepage, wiki, comics } = char;
 
   let imgStyle = { objectFit: "cover" };
-  if (
-    thumbnail ===
-    "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg"
-  ) {
+  if (thumbnail === "http://i.annihil.us/u/prod/marvel/i/mg/b/40/image_not_available.jpg") {
     imgStyle = { objectFit: "contain" };
   }
 
